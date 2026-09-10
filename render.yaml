@@ -1,0 +1,23 @@
+# Render Blueprint — one-click deploy of the backend from GitHub
+# Docs: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: erp-crm-backend
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm install && npx prisma generate && npm run build
+    startCommand: npx prisma db push && npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "5000"
+      - key: DATABASE_URL
+        sync: false   # prompt at deploy time
+      - key: JWT_SECRET
+        sync: false   # prompt at deploy time
+      - key: CORS_ORIGIN
+        sync: false   # prompt at deploy time
