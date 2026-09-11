@@ -24,6 +24,29 @@ app.get('/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// ── Root / API info ───────────────────────────
+app.get('/', async (_req, res) => {
+  res.status(200).json({
+    success: true,
+    name: 'ERP + CRM Operations Portal API',
+    version: '1.0.0',
+    status: 'running',
+    apiBase: '/api/v1',
+    endpoints: [
+      'GET  /health',
+      'POST /api/v1/auth/login',
+      'GET  /api/v1/auth/me',
+      'GET  /api/v1/users',
+      'GET  /api/v1/customers',
+      'GET  /api/v1/products',
+      'GET  /api/v1/challans',
+      'GET  /api/v1/dashboard/stats',
+    ],
+    docs: 'See the README / Postman collection for the full endpoint reference.',
+    timestamp: new Date().toISOString(),
+  });
+});
+
 // ── API Routes ────────────────────────────────
 const API = '/api/v1';
 app.use(`${API}/auth`, authRouter);
