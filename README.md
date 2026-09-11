@@ -10,8 +10,11 @@ A full-stack Operations Portal built for wholesale/distribution companies to man
 | **Backend API** (base: `/api/v1`) | https://erp-crm-backend-u5a0.onrender.com |
 | **API Health Check** | https://erp-crm-backend-u5a0.onrender.com/health |
 | **GitHub Repository** | https://github.com/jayalakshmiyerragunta/erp-crm-portal |
+| **Submission Document** | https://github.com/jayalakshmiyerragunta/erp-crm-portal/blob/main/SUBMISSION.md |
 
-> Click any live URL to open it. The backend root (`/`) returns an API info banner, and `/health` reports service status.
+> Click any live URL to open it. The backend root (`/`) shows a status page in the browser
+> and returns an API info JSON for API clients; `/health` reports service status.
+> `SUBMISSION.md` consolidates links, credentials, API reference, setup, architecture and limitations.
 
 ## Features Built
 
@@ -59,7 +62,7 @@ Start the backend dev server:
 ```bash
 npm run dev
 ```
-*(Server will start on http://localhost:5001 — the default `.env` uses port 5000 may be occupied by other services)*
+*(Server starts on http://localhost:5001 — port 5000 is commonly occupied by other services; change `PORT` in `.env` if needed)*
 
 ### 3. Frontend Setup
 In a new terminal:
@@ -111,6 +114,8 @@ This will start:
 | `backend/` | Node.js + Express + TypeScript REST API (Prisma, Zod, JWT, bcryptjs) |
 | `frontend/` | React 18 + Vite SPA (React Router v6, Axios, enterprise CSS UI) |
 | `docker-compose.yml` | One-command local/prod stack: Postgres + API + Nginx-served SPA |
+| `postman_collection.json` | Complete Postman collection against the live API |
+| `SUBMISSION.md` | Single submission-ready document with links, credentials, API and limitations |
 
 **Module structure (backend)**
 
@@ -210,7 +215,7 @@ The SPA fallback (`vercel.json` → `frontend/vercel.json`) rewrites all unknown
 
 ```
 GET  https://<backend>/health              → { "status": "ok" }
-GET  https://<backend>/                    → API banner (name, endpoints)
+GET  https://<backend>/                    → status page (browser) / API info JSON (API client)
 POST https://<backend>/api/v1/auth/login   → { success, data: { token, user } }
 GET  https://<frontend>/login              → login page, then portal
 ```
@@ -290,7 +295,7 @@ All routes are under `/api/v1`. Prefix applies to the references below.
 |---|---|---|---|
 | GET | `/dashboard/stats` | JWT | KPIs, recent challans, low-stock items |
 | GET | `/health` | — | Service health (no `/api/v1` prefix) |
-| GET | `/` | — | API info banner (no `/api/v1` prefix) |
+| GET | `/` | — | Status page (browser) / API info JSON (no `/api/v1` prefix) |
 
 **Standard response shape**
 
