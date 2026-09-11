@@ -2,6 +2,17 @@
 
 A full-stack Operations Portal built for wholesale/distribution companies to manage Customers, Products, Inventory, and Sales Challans.
 
+## 🔗 Live Links
+
+| Resource | URL |
+|---|---|
+| **Frontend Portal** | https://erp-crm-portal-idok.vercel.app |
+| **Backend API** (base: `/api/v1`) | https://erp-crm-backend-u5a0.onrender.com |
+| **API Health Check** | https://erp-crm-backend-u5a0.onrender.com/health |
+| **GitHub Repository** | https://github.com/jayalakshmiyerragunta/erp-crm-portal |
+
+> Click any live URL to open it. The backend root (`/`) returns an API info banner, and `/health` reports service status.
+
 ## Features Built
 
 1. **Authentication & Roles:** JWT-based auth with `ADMIN`, `SALES`, `WAREHOUSE`, and `ACCOUNTS` roles. Role guards on API endpoints and Frontend routes.
@@ -12,7 +23,7 @@ A full-stack Operations Portal built for wholesale/distribution companies to man
 
 ## Tech Stack
 - **Backend:** Node.js, Express, TypeScript, Zod (validation), Prisma ORM, PostgreSQL.
-- **Frontend:** React 18, Vite, TypeScript, Axios, React Router v6, custom Glassmorphism UI (CSS).
+- **Frontend:** React 18, Vite, TypeScript, Axios, React Router v6, custom enterprise UI (CSS design system).
 
 ---
 
@@ -98,7 +109,7 @@ This will start:
 | Folder | Purpose |
 |---|---|
 | `backend/` | Node.js + Express + TypeScript REST API (Prisma, Zod, JWT, bcryptjs) |
-| `frontend/` | React 18 + Vite SPA (React Router v6, Axios, glassmorphism UI) |
+| `frontend/` | React 18 + Vite SPA (React Router v6, Axios, enterprise CSS UI) |
 | `docker-compose.yml` | One-command local/prod stack: Postgres + API + Nginx-served SPA |
 
 **Module structure (backend)**
@@ -146,21 +157,21 @@ and `src/config/` (env validation, Prisma client).
 - Challan `CANCEL` restores stock (with an `IN` movement) **only if** the challan was previously `CONFIRMED`.
 
 ---
-## 🌐 Deployment (Free Tier)
+## 🌐 Deployment (Free Tier — Current Live Stack)
 
-The app is designed to deploy to free hosting tiers. No AWS account or paid infrastructure required.
+This repo is currently **deployed and running** on free tiers. PostgreSQL — **Neon**, Backend API — **Render**, Frontend — **Vercel**.
 
 | Layer | Provider | Notes |
 |---|---|---|
-| **Frontend** | Vercel (or Netlify) | Builds the Vite SPA; static hosting |
-| **Backend API** | Railway (or Render / Fly.io) | Runs `npm run build && npm start` |
-| **Database** | Neon (or Supabase / Railway Postgres) | Managed PostgreSQL |
+| **Frontend** | Vercel | Builds the Vite SPA from `frontend/`; static hosting |
+| **Backend API** | Render | Blueprint (`render.yaml`) → web service, TypeScript build + start |
+| **Database** | Neon | Managed PostgreSQL (serverless, auto-scales to zero) |
 
-### 1. Database (Neon / Supabase)
+### 1. Database (Neon)
 
-1. Create a free PostgreSQL instance.
-2. Copy the connection string — it looks like `postgresql://user:pass@host/db?sslmode=require`.
-3. Use the provider's SSL-enabled connection string — Railway-hosted apps require it.
+1. Create a free Neon project (or any Postgres provider).
+2. Copy the connection string — looks like `postgresql://user:pass@ep-xxx.aws.neon.tech/dbname?sslmode=require`.
+3. Keep it out of git — set it as the `DATABASE_URL` env var on the backend host.
 
 ### 2. Backend env vars
 
@@ -168,49 +179,40 @@ Set these in your hosting provider's dashboard (never commit real secrets):
 
 | Variable | Example | Required |
 |---|---|---|
-| `PORT` | `5000` | No (defaults to 5000) |
+| `PORT` | `5000` | No (Render sets its own) |
 | `NODE_ENV` | `production` | No |
 | `DATABASE_URL` | `postgresql://...` | **Yes** |
 | `JWT_SECRET` | long random string | **Yes** |
 | `JWT_EXPIRES_IN` | `7d` | No |
 | `CORS_ORIGIN` | `https://<your-frontend-domain>` | Recommended |
 
-**Deploy steps (Railway):**
+**Deploy steps (Render):**
 1. Push the repo to GitHub.
-2. New Project → *Deploy from GitHub* → select the repo.
-3. **Set the service Root Directory to `/backend`** (Settings → Root Directory) — this is required because this is a monorepo and the API lives in `backend/`. The config file lives at `backend/railway.json`.
-4. Add a **Domain** (backend gets a `*.up.railway.app` URL automatically; call `GET /health` to verify).
-5. Set the env vars above → the app auto-deploys.
-6. **Seed the DB once** (schema is auto-created on start via `db push`): open the Railway *Shell* tab and run `npm run db:seed`, or run it locally against the deployed `DATABASE_URL`.
+2. *New* → *Blueprint* → select the repo → Render reads the included `render.yaml`, which runs `npm install --include=dev && npx prisma generate && npm run build`, then starts with `npx prisma db push && npm start`.
+3. Add the env vars above.
+4. Deploy → service gets a `*.onrender.com` URL. Verify: open `/` (API banner) and `/health`.
+5. **Seed the DB once** (schema is auto-created on start via `prisma db push`): run `npm run db:seed` locally against the deployed `DATABASE_URL`, or use the Render *Shell* tab.
 
-**Deploy steps (Render — alternative):**
-1. Push the repo to GitHub.
-2. *New* → *Blueprint* → select the repo → Render reads the included `render.yaml` (API web service + auto `npm install → prisma generate → build → start`).
-3. Add the env vars (or leave empty — Render prompts for `DATABASE_URL` and `JWT_SECRET`).
-4. Deploy → service gets a `*.onrender.com` URL.
-5. Seed once via the Render *Shell* tab: `npm run db:seed`.
+### 3. Frontend (Vercel)
 
-### 3. Frontend env var
+In Vercel project settings (not `vercel.json`) set:
 
-On Vercel, set:
+- **Framework Preset:** `Vite`
+- **Root Directory:** `frontend`
+- **Build Command:** `npm run build` (auto-detected)
+- **Output Directory:** `dist` (auto-detected)
 
-| Variable | Value |
-|---|---|
-| `VITE_API_URL` | `https://<your-backend-domain>/api/v1` |
+`VITE_API_URL` is **optional** — the frontend defaults to the deployed Render backend (`https://erp-crm-backend-u5a0.onrender.com/api/v1`). Set it only if you deploy the backend to a different URL. During local development you can point it at `http://localhost:5001/api/v1`.
 
-> During local development this is left empty — the Vite dev server proxies `/api` → `http://localhost:5000` (see `frontend/vite.config.ts`). The deployed backend URL is only needed for production builds.
-
-**Deploy steps (Vercel):**
-1. Import the repo on vercel.com, root dir = `frontend` (or set via the root `vercel.json` → `rootDirectory`).
-2. Add the `VITE_API_URL` env var.
-3. Build command `npm run build`, output dir `dist` (auto-detected from Vite).
+The SPA fallback (`vercel.json` → `frontend/vercel.json`) rewrites all unknown paths to `/index.html` so routes like `/login`, `/customers`, `/challans` work on refresh. Note: `vercel.json` must live **inside** the Root Directory (`frontend/`), and `rootDirectory` is a dashboard setting, not a valid `vercel.json` property.
 
 ### 4. Verify after deploy
 
 ```
-GET  https://<backend>/health            → { "status": "ok" }
-POST https://<backend>/api/v1/auth/login → { token, user }
-GET  https://<frontend>/dashboard        → login, then portal
+GET  https://<backend>/health              → { "status": "ok" }
+GET  https://<backend>/                    → API banner (name, endpoints)
+POST https://<backend>/api/v1/auth/login   → { success, data: { token, user } }
+GET  https://<frontend>/login              → login page, then portal
 ```
 
 ---
@@ -225,9 +227,83 @@ GET  https://<frontend>/dashboard        → login, then portal
 
 Import `postman_collection.json` into Postman.
 
-- A `base_url` collection variable points at `http://localhost:5000/api/v1`.
-- Logging in auto-saves the JWT into the `token` variable (test script) — every other request sends `Authorization: Bearer {{token}}` automatically.
-- For a deployed backend, just update `base_url`.
+- The collection ships with two variables: `base_url` (points at the **live Render backend** by default, or set it to `http://localhost:5001/api/v1` for local dev) and `token` (auto-filled after login).
+- A **Login** request per role is included; each login saves its JWT so every other request sends `Authorization: Bearer {{token}}` automatically.
+- Sorted into folders: Auth, Users, Customers, Products & Stock, Sales Challans, Dashboard, Health.
+
+## 🧩 API Endpoints
+
+All routes are under `/api/v1`. Prefix applies to the references below.
+
+### Auth (`/auth`)
+
+| Method | Path | Auth | Roles | Description |
+|---|---|---|---|---|
+| POST | `/auth/login` | — | — | Returns `data.token` + `data.user` |
+| GET | `/auth/me` | JWT | all | Current user profile |
+
+### Users (`/users`)
+
+| Method | Path | Auth | Roles | Description |
+|---|---|---|---|---|
+| GET | `/users` | JWT | ADMIN | List all users |
+| GET | `/users/:id` | JWT | ADMIN | Get one user |
+| POST | `/users` | JWT | ADMIN | Create a user |
+| PATCH | `/users/:id` | JWT | ADMIN | Update a user |
+
+### Customers (`/customers`)
+
+| Method | Path | Auth | Roles | Description |
+|---|---|---|---|---|
+| GET | `/customers` | JWT | all | List (search, `status`, `customerType`, pagination) |
+| GET | `/customers/:id` | JWT | all | Customer detail |
+| POST | `/customers` | JWT | ADMIN, SALES | Create customer |
+| PATCH | `/customers/:id` | JWT | ADMIN, SALES | Update customer |
+| GET | `/customers/:id/followups` | JWT | all | Follow-up timeline |
+| POST | `/customers/:id/followups` | JWT | ADMIN, SALES | Add follow-up note |
+
+### Products & Stock (`/products`)
+
+| Method | Path | Auth | Roles | Description |
+|---|---|---|---|---|
+| GET | `/products` | JWT | all | List (search, `category`, `lowStock`, pagination) |
+| GET | `/products/categories` | JWT | all | Distinct categories |
+| GET | `/products/:id` | JWT | all | Product detail |
+| POST | `/products` | JWT | ADMIN, WAREHOUSE | Create product |
+| PATCH | `/products/:id` | JWT | ADMIN, WAREHOUSE | Update product |
+| POST | `/products/:id/stock` | JWT | ADMIN, WAREHOUSE | Stock IN (ledger-logged) |
+| GET | `/products/:id/movements` | JWT | all | Stock movement ledger |
+
+### Sales Challans (`/challans`)
+
+| Method | Path | Auth | Roles | Description |
+|---|---|---|---|---|
+| GET | `/challans` | JWT | all | List (search, `status`, pagination) |
+| GET | `/challans/:id` | JWT | all | Challan detail (with snapshots) |
+| POST | `/challans` | JWT | ADMIN, SALES | Create (DRAFT or CONFIRMED) |
+| PATCH | `/challans/:id/confirm` | JWT | ADMIN, SALES | Confirm → atomic stock deduction |
+| PATCH | `/challans/:id/cancel` | JWT | ADMIN, SALES | Cancel → restore stock if confirmed |
+
+### Dashboard & Health
+
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| GET | `/dashboard/stats` | JWT | KPIs, recent challans, low-stock items |
+| GET | `/health` | — | Service health (no `/api/v1` prefix) |
+| GET | `/` | — | API info banner (no `/api/v1` prefix) |
+
+**Standard response shape**
+
+```json
+// Success
+{ "success": true, "message": "...", "data": { ... } }
+
+// Paginated list
+{ "success": true, "data": { "customers": [...], "pagination": { "page": 1, "limit": 15, "total": 42, "totalPages": 3, "hasNextPage": true, "hasPrevPage": false } } }
+
+// Error
+{ "success": false, "message": "Insufficient stock for: \"Toor Dal (50kg)\" (available: 8, requested: 10)" }
+```
 
 ---
 
