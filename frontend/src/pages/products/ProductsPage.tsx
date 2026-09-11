@@ -80,7 +80,7 @@ export default function ProductsPage() {
   }
 
   return (
-    <div style={{ animation: 'slideUp 0.4s ease' }}>
+    <div>
       <div className="page-header">
         <div className="page-header-left">
           <h1>Products & Inventory</h1>
@@ -163,7 +163,7 @@ export default function ProductsPage() {
               <div key={product.id} className={`card ${!product.isActive ? 'opacity-60' : ''}`} style={{ padding: 'var(--space-5)', display: 'flex', flexDirection: 'column' }}>
                 <div className="flex justify-between items-start mb-3">
                   <div>
-                    <div className="text-xs font-semibold text-primary mb-1 uppercase tracking-wider">{product.category}</div>
+                    <div className="text-xs font-semibold text-dim mb-1 uppercase tracking-wider">{product.category}</div>
                     <h3 className="font-bold text-base leading-tight mb-1">{product.name}</h3>
                     <div className="text-xs text-dim font-mono">{product.sku}</div>
                   </div>
@@ -212,7 +212,7 @@ export default function ProductsPage() {
                         className="btn btn-secondary flex-1 px-2"
                         onClick={() => { setStockProduct(product); setShowStockForm(true); }}
                       >
-                        <ArrowUpCircle size={14} className="text-success" /> IN
+                        <ArrowUpCircle size={14} /> IN
                       </button>
                       <button 
                         className="btn btn-secondary flex-1 px-2"

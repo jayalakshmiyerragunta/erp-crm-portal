@@ -80,7 +80,7 @@ export default function UsersPage() {
   }
 
   return (
-    <div style={{ animation: 'slideUp 0.4s ease' }}>
+    <div>
       <div className="page-header">
         <div className="page-header-left">
           <h1>User Management</h1>

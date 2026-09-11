@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { Zap, Eye, EyeOff, Mail, Lock, Users, Package, FileText, ShieldCheck } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, Users, Package, FileText, ShieldCheck } from 'lucide-react';
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -41,10 +41,8 @@ export default function LoginPage() {
       <div className="login-panel">
         <div className="login-panel-inner">
           <div className="login-brand">
-            <div className="login-logo">
-              <Zap size={22} />
-            </div>
-            <div className="login-brand-name">ERP+CRM</div>
+            <div className="login-logo">EP</div>
+            <div className="login-brand-name">Operations Portal</div>
           </div>
 
           <h2 className="login-panel-title">
@@ -68,9 +66,7 @@ export default function LoginPage() {
       <div className="login-form-side">
         <div className="login-card">
           <div className="login-card-brand">
-            <div className="login-card-logo">
-              <Zap size={20} />
-            </div>
+            <div className="login-card-logo">EP</div>
             <div>
               <div className="login-title">Welcome back</div>
               <div className="text-xs text-dim">Sign in to the Operations Portal</div>

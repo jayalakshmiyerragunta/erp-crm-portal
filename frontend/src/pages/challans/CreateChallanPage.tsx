@@ -141,7 +141,7 @@ export default function CreateChallanPage() {
   }
 
   return (
-    <div style={{ animation: 'slideUp 0.4s ease', maxWidth: 1000, margin: '0 auto' }}>
+    <div style={{ maxWidth: 1000, margin: '0 auto' }}>
       <button className="btn btn-ghost btn-sm mb-4" onClick={() => navigate('/challans')} style={{ paddingLeft: 0 }}>
         <ArrowLeft size={16} /> Back to Challans
       </button>

@@ -67,7 +67,7 @@ export default function ChallansPage() {
   }, [statusFilter, setSearchParams]);
 
   return (
-    <div style={{ animation: 'slideUp 0.4s ease' }}>
+    <div>
       <div className="page-header">
         <div className="page-header-left">
           <h1>Sales Challans</h1>

@@ -4,7 +4,7 @@ import type { Role } from '../types';
 import {
   LayoutDashboard, Users, Package, FileText,
   ShoppingCart, LogOut, Menu, X,
-  Zap, Building2
+  Building2
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -93,12 +93,10 @@ export default function AppLayout() {
       {/* Sidebar */}
       <aside className={`sidebar${sidebarOpen ? ' open' : ''}`}>
         <div className="sidebar-logo">
-          <div className="sidebar-logo-icon">
-            <Zap size={20} color="white" />
-          </div>
+          <div className="sidebar-logo-icon">EP</div>
           <div>
-            <div className="sidebar-logo-text">ERP+CRM</div>
-            <div className="sidebar-logo-sub">Operations Portal</div>
+            <div className="sidebar-logo-text">Operations Portal</div>
+            <div className="sidebar-logo-sub">ERP · CRM · Inventory</div>
           </div>
         </div>
 
@@ -121,10 +119,7 @@ export default function AppLayout() {
 
         <div className="sidebar-footer">
           <div className="user-card" onClick={logout}>
-            <div
-              className="user-avatar"
-              style={{ background: `linear-gradient(135deg, ${roleColors[user?.role ?? 'ADMIN']}cc, ${roleColors[user?.role ?? 'ADMIN']})` }}
-            >
+            <div className="user-avatar">
               {user ? getInitials(user.name ?? user.email) : '?'}
             </div>
             <div className="user-info">

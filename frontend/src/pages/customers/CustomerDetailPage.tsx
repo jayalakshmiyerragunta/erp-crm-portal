@@ -84,7 +84,7 @@ export default function CustomerDetailPage() {
   }
 
   return (
-    <div style={{ animation: 'slideUp 0.4s ease' }}>
+    <div>
       <button
         className="btn btn-ghost btn-sm mb-6"
         onClick={() => navigate('/customers')}

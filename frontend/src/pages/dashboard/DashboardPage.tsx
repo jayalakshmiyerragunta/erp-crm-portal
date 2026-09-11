@@ -53,8 +53,6 @@ export default function DashboardPage() {
       value: stats?.customers.total ?? 0,
       sub: `${stats?.customers.active ?? 0} active`,
       icon: <Users size={22} />,
-      color: '#6366f1',
-      accent: '#6366f1',
       link: '/customers',
     },
     {
@@ -62,8 +60,6 @@ export default function DashboardPage() {
       value: stats?.products.total ?? 0,
       sub: `${stats?.products.lowStock ?? 0} low stock`,
       icon: <Package size={22} />,
-      color: '#10b981',
-      accent: '#10b981',
       link: '/products',
     },
     {
@@ -71,8 +67,6 @@ export default function DashboardPage() {
       value: stats?.challans.total ?? 0,
       sub: `${stats?.challans.confirmed ?? 0} confirmed`,
       icon: <FileText size={22} />,
-      color: '#f59e0b',
-      accent: '#f59e0b',
       link: '/challans',
     },
     {
@@ -80,18 +74,16 @@ export default function DashboardPage() {
       value: stats?.challans.draft ?? 0,
       sub: 'Pending confirmation',
       icon: <TrendingUp size={22} />,
-      color: '#3b82f6',
-      accent: '#3b82f6',
       link: '/challans?status=DRAFT',
     },
   ];
 
   return (
-    <div style={{ animation: 'slideUp 0.4s ease' }}>
+    <div>
       <div className="page-header">
         <div className="page-header-left">
           <h1>Dashboard</h1>
-          <p>Welcome back! Here's what's happening today.</p>
+          <p>A live snapshot of customers, inventory and sales challans.</p>
         </div>
         <div className="text-xs text-dim">
           {format(new Date(), 'EEEE, d MMMM yyyy')}
@@ -102,17 +94,8 @@ export default function DashboardPage() {
       <div className="grid-4 mb-8">
         {statCards.map((card) => (
           <Link key={card.label} to={card.link} style={{ textDecoration: 'none' }}>
-            <div
-              className="stat-card"
-              style={{ '--card-accent': card.accent } as React.CSSProperties}
-            >
-              <div
-                className="stat-icon"
-                style={{
-                  background: `${card.color}18`,
-                  color: card.color,
-                }}
-              >
+            <div className="stat-card">
+              <div className="stat-icon">
                 {card.icon}
               </div>
               <div className="stat-info">

@@ -124,7 +124,7 @@ export default function ChallanDetailPage() {
   const { customerSnapshot: c } = challan;
 
   return (
-    <div style={{ animation: 'slideUp 0.4s ease', maxWidth: 900, margin: '0 auto' }}>
+    <div style={{ maxWidth: 900, margin: '0 auto' }}>
       <div className="flex justify-between items-center mb-6">
         <button className="btn btn-ghost btn-sm" onClick={() => navigate('/challans')} style={{ paddingLeft: 0 }}>
           <ArrowLeft size={16} /> Back

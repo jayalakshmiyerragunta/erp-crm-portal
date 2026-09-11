@@ -63,7 +63,7 @@ export default function CustomersPage() {
   }
 
   return (
-    <div style={{ animation: 'slideUp 0.4s ease' }}>
+    <div>
       <div className="page-header">
         <div className="page-header-left">
           <h1>Customers</h1>
