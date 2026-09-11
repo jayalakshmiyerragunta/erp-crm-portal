@@ -1,4 +1,9 @@
 {
-  "rootDirectory": "frontend",
+  "services": {
+    "frontend": {
+      "root": "frontend",
+      "framework": "vite"
+    }
+  },
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
