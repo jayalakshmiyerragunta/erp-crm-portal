@@ -178,9 +178,10 @@ Set these in your hosting provider's dashboard (never commit real secrets):
 **Deploy steps (Railway):**
 1. Push the repo to GitHub.
 2. New Project → *Deploy from GitHub* → select the repo.
-3. Add a **Domain** (backend gets a `*.up.railway.app` URL automatically; call `GET /health` to verify).
-4. Set the env vars above → the app auto-deploys.
-5. **Seed the DB once** (schema is auto-created on start via `db push`): open the Railway *Shell* tab and run `npm run db:seed`, or run it locally against the deployed `DATABASE_URL`.
+3. **Set the service Root Directory to `/backend`** (Settings → Root Directory) — this is required because this is a monorepo and the API lives in `backend/`. The config file lives at `backend/railway.json`.
+4. Add a **Domain** (backend gets a `*.up.railway.app` URL automatically; call `GET /health` to verify).
+5. Set the env vars above → the app auto-deploys.
+6. **Seed the DB once** (schema is auto-created on start via `db push`): open the Railway *Shell* tab and run `npm run db:seed`, or run it locally against the deployed `DATABASE_URL`.
 
 **Deploy steps (Render — alternative):**
 1. Push the repo to GitHub.
